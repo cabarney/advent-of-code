@@ -36,7 +36,7 @@ let scoreHand (round: string) (mode: Mode) =
 
 let rounds = File.ReadAllLines("../input.txt") |> Seq.map (fun x -> x.Replace(" ", ""))
 
-List.iter (fun mode -> 
+[ Mode.Play; Mode.Outcome ] |> List.iter (fun mode -> 
     let score = rounds |> Seq.map (fun round -> scoreHand round mode) |> Seq.sum
-    printfn "The Part %i total score is %i" (int mode) score) [Mode.Play; Mode.Outcome]
+    printfn "The Part %i total score is %i" (int mode) score)
 
