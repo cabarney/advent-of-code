@@ -1,5 +1,7 @@
 open System.IO
 
+let inputPath = Path.Combine(__SOURCE_DIRECTORY__, "../input.txt")
+
 printfn "Day 2: Rock, Paper, Scissors (F#)"
 
 let scoreHand hand =
@@ -20,7 +22,7 @@ let simulateHands (hands: seq<int * int>) (part: int) =
         |> Seq.sum
 
 let hands = 
-  seq(File.ReadAllLines("../input.txt") 
+  seq(File.ReadAllLines(inputPath) 
   |> Seq.map (fun x -> x.Replace(" ", "")))
   |> Seq.map (fun x -> scoreHand x)
 

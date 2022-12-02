@@ -1,6 +1,10 @@
+from os import path
+basepath = path.dirname(__file__)
+inputPath = path.abspath(path.join(basepath, "..", "input.txt"))
+
 print("Day 1: Calorie Counting (python)")
 
-input = open('../input.txt', 'r').readlines()
+input = open(inputPath, 'r').readlines()
 elves = [[int(cal) for cal in group.split("\n")] for group in "".join(input).split("\n\n")]
 elves = sorted([sum(elf) for elf in elves], reverse=True)
 

@@ -1,5 +1,7 @@
 open System.IO
 
+let inputPath = Path.Combine(__SOURCE_DIRECTORY__, "../input.txt")
+
 printfn "Day 2: Rock, Paper, Scissors (F#) - ALTERNATE SOLUTION"
 
 type Mode = | Play = 1 | Outcome = 2
@@ -34,7 +36,7 @@ let scoreHand (round: string) (mode: Mode) =
     | Scissors, Mode.Play, Scissors  | Scissors, Mode.Outcome, Draw -> int Outcome.Draw + int Value.Scissors
     | _ -> failwith "Invalid input"
 
-let rounds = File.ReadAllLines("../input.txt") |> Seq.map (fun x -> x.Replace(" ", ""))
+let rounds = File.ReadAllLines(inputPath) |> Seq.map (fun x -> x.Replace(" ", ""))
 
 [ Mode.Play; Mode.Outcome ] |> List.iter (fun mode -> 
     let score = rounds |> Seq.map (fun round -> scoreHand round mode) |> Seq.sum
