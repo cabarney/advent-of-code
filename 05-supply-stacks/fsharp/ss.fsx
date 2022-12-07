@@ -1,4 +1,4 @@
-// NOT COMPLETE. :( Will come back to it later, hopefully....
+// NOT COMPLETE. ☹ Will come back to it later, hopefully....
 
 open System.IO
 
@@ -24,25 +24,53 @@ let initializeStacks (config: string[]) =
   [|0..8|]
   |> Array.map (fun stack -> stack * 4 + 1)
   |> Array.map (fun idx -> 
-    config |> Array.rev
+    config
     |> Seq.map (fun line -> line[idx])
     |> Seq.filter (fun item -> item <> ' ')
     |> Seq.toList )
 
-
-let crateMover9000 (stacks: List<char>[]) (commands: int[][]) = 
-  (stacks, commands) 
-  ||> Seq.fold (fun stacks command -> 
-    stacks[command[1]]
-    stacks )
-
-let crateMover9001 stacks = 
-  1
-    
-let stacks = initializeStacks configLines
-for stack in stacks do
-  for item in stack do
-    printf $" [{item}] "
+let printStacks (stacks: List<char>[]) = 
+  let max = stacks |> Array.maxBy (fun x -> x |> List.length) |> List.length
+  for i in max-1 .. -1 .. 0 do
+    for s in 0 .. 8 do
+      if stacks[s].Length > i then printf $"[{stacks[s][stacks[s].Length - i - 1]}] " else printf "    "
+    printfn ""
+  {0 .. stacks.Length - 1 } |> Seq.iter (fun idx -> printf $" {idx + 1}  ")
   printfn ""
 
-crateMover9000 stacks commandLines
+// This can be better
+let processCommand ref (stacks: List<char>[]) (command: int[]) =
+  let tmpStack = stacks[command[1]][0..command[0]-1]
+  let newStack = stacks[command[1]][command[0]..]
+  Array.set stacks command[1] newStack
+  Array.set stacks command[2] (List.append tmpStack stacks[command[2]])
+
+
+// THIS IS NOT THE WAY
+
+// let processCommand2 ref (stacks: List<char>[]) (command: int[]) =
+//   let rec foo acc i =
+//     match i with
+//     | command[0] -> acc
+//     | v when v < command[0] -> foo (stacks[command[1]][v] :: acc) i+1
+    
+//   let tmpStack = foo ([], 0)
+
+
+// let crateMover9000 (stacks: List<char>[]) (commands: int[][]) = 
+//   (stacks, commands) 
+//   ||> Seq.fold (fun stacks command -> 
+//     stacks[command[1]]
+//     stacks )
+
+let crateMover9001 ref stacks commands = 
+  for c in commands do
+    processCommand ref stacks c
+
+let stacks = initializeStacks configLines
+
+printStacks stacks
+crateMover9001 ref stacks commandLines
+stacks |> Array.iter (fun x -> printf "%c" x.Head)
+printfn ""
+printStacks stacks
