@@ -2,11 +2,6 @@ from collections import namedtuple
 import functools
 import itertools
 from os import path
-from typing import Union, cast
-import typing
-import re
-
-Node = Union[int, list[int]]
 
 basepath = path.dirname(__file__)
 inputPath = path.abspath(path.join(basepath, "..", "input.txt"))
@@ -46,15 +41,11 @@ def compare(left, right):
 
 def compareStr(left, right): return compare(eval(left), eval(right))
 
-# compareStr(*pairs[6])
-# exit()
-
-print(sum(i+1 for i, pair in enumerate(pairs) if compareStr(pair[0], pair[1]) < 0))
-
+print("Part 1:", sum(i+1 for i, pair in enumerate(pairs) if compareStr(pair[0], pair[1]) < 0))
 
 dividers = ["[[2]]", "[[6]]"]
 all = list(itertools.chain(*pairs, dividers))
 allSorted = sorted(all, key=functools.cmp_to_key(compareStr))
-
 dividerIndices = [i + 1 for i, x in enumerate(allSorted) if x in dividers]
-print(dividerIndices[0] * dividerIndices[1])
+
+print("Part 2:", dividerIndices[0] * dividerIndices[1])
