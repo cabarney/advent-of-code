@@ -18,16 +18,14 @@ pattern = r"Blueprint (\d+): Each ore robot costs (\d+) ore. Each clay robot cos
 
 
 def parseBlueprints(input):
-    blueprints = {}
     for line in input:
         match = re.match(pattern, line)
         if match:
             blueprint = Blueprint(*[int(m) for m in match.groups()])
-            blueprints[blueprint.id] = blueprint
-    return blueprints
+            yield blueprint
 
 
-blueprints = parseBlueprints(input)
+blueprints = list(parseBlueprints(input))
 
 def getChoices(blueprint, resources):
     if resources["ore"] >= blueprint.robot_ore_cost:
@@ -40,8 +38,8 @@ def getChoices(blueprint, resources):
         yield "geode"
     yield "none"
 
-def simulate(id, minutes):
-    blueprint = blueprints[id]
+def simulate(blueprint, minutes):
+    # blueprint = blueprints[id]
     maxGeodes = 0
     initialState = State(1, {"ore": 1, "clay": 0, "obsidian": 0, "geode": 0}, {"ore": 0, "clay": 0, "obsidian": 0, "geode": 0})
     queue = deque([initialState])
@@ -49,7 +47,7 @@ def simulate(id, minutes):
     while queue:
         state = queue.popleft()
         if state.time > prevTime:
-            print(f"{id}, minute {state.time}")
+            print(f"{blueprint.id}, minute {state.time}")
             prevTime = state.time
 
         if state.time > minutes:
@@ -91,8 +89,11 @@ def simulate(id, minutes):
             newState = State(state.time + 1, robots, resources)
 
             queue.append(newState)
-    print(id, maxGeodes, id * maxGeodes)
+    print(blueprint.id, maxGeodes, blueprint.id * maxGeodes)
+    return (blueprint.id, maxGeodes, blueprint.id * maxGeodes)
 
-for id in blueprints:
-    simulate(id, 24)
-        
+
+results = [simulate(blueprint, 24) for blueprint in blueprints]
+for r in results:
+    print(f"Blueprint {r[0]}: {r[1]} geodes opened, quality level = {r[2]}")
+print("Part 1: Max Quality: ", max([r[2] for r in results]))
