@@ -1,6 +1,6 @@
 {
 	"name": "Advent of Code",
-	"image": "mcr.microsoft.com/devcontainers/dotnet:0-6.0-bullseye",
+	"image": "mcr.microsoft.com/devcontainers/python:0-3.11",
 	"customizations": {
 		"vscode": {		
 			"extensions": [
@@ -12,8 +12,7 @@
 		}
 	},
 	"features": {
-		"ghcr.io/devcontainers/features/python:1": {},
-		"ghcr.io/devcontainers/features/git:1": { "version": "os-provided" }
+		"ghcr.io/devcontainers/features/dotnet:1": {}
 	},
 	"remoteUser": "vscode",
 	"postStartCommand": "git config --global --replace-all safe.directory ${containerWorkspaceFolder}"
